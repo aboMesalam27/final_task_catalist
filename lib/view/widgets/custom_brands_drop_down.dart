@@ -6,9 +6,9 @@ import '../controller/brands/brands_cubit.dart';
 import '../controller/brands/brands_state.dart';
 
 class BrandsComponents extends StatefulWidget {
-  String? selectBrandId;
+  final ValueChanged<String?>? onChanged;
 
-  BrandsComponents({super.key, this.selectBrandId});
+  BrandsComponents({super.key, required this.onChanged});
 
   @override
   State<BrandsComponents> createState() => _BrandsComponentsState();
@@ -35,9 +35,7 @@ class _BrandsComponentsState extends State<BrandsComponents> {
                       BorderSide(color: AppColors.grey.withOpacity(0.8)),
                 ),
                 isDense: true,
-                label: widget.selectBrandId != null
-                    ? null
-                    : const Text(AppText.brands),
+                label: const Text(AppText.brands),
                 contentPadding: EdgeInsets.symmetric(horizontal: 10.w),
               ),
               isExpanded: true,
@@ -55,7 +53,7 @@ class _BrandsComponentsState extends State<BrandsComponents> {
                   .map((item) => DropdownMenuItem<String>(
                         onTap: () {
                           setState(() {
-                            widget.selectBrandId = item.id.toString();
+                            widget.onChanged!(item.id.toString());
                           });
                         },
                         value: item.id.toString(),
@@ -68,10 +66,10 @@ class _BrandsComponentsState extends State<BrandsComponents> {
                       ))
                   .toList(),
               onChanged: (value) {
-                widget.selectBrandId = value.toString();
+                widget.onChanged!(value.toString());
               },
               onSaved: (value) {
-                widget.selectBrandId = value.toString();
+                widget.onChanged!(value.toString());
               },
             );
           } else {

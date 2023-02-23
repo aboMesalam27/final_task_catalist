@@ -9,7 +9,7 @@ import '../../index_shared.dart';
 
 class DBProvider {
   static Database? _database;
-  static const String tableName = "products_table1";
+  static const String tableName = "products_table2";
 
   static Future<Database?> get database async {
     if (_database != null) return _database;
@@ -23,11 +23,12 @@ class DBProvider {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     final path = join(documentsDirectory.path, '$tableName.db');
 
-    return await openDatabase(path, version: 154, onOpen: (db) {},
+    return await openDatabase(path, version: 156, onOpen: (db) {},
         onCreate: (Database db, int version) async {
       await db.execute('CREATE TABLE $tableName('
           'id INTEGER PRIMARY KEY,'
           'productName TEXT,'
+          'isLocal INTEGER DEFAULT 0,'
           'photoPath TEXT'
           // 'brandID INTEGER,'
           //'brandName TEXT'
@@ -68,7 +69,7 @@ class DBProvider {
     final res = await db!.rawQuery("SELECT * FROM $tableName");
 
     if (kDebugMode) {
-      print(res.length);
+      print(res[0]);
     }
     List<Product> list =
         res.isNotEmpty ? res.map((c) => Product.fromJson(c)).toList() : [];

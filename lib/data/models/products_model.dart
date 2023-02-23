@@ -30,12 +30,14 @@ class Product {
   String? categoryID;
   String? categoryName;
   int? companyID;
+  int? isLocal;
   String? companyName;
   Product({
     required this.categoryID,
     required this.brandID,
     required this.productName,
     required this.sku,
+    required this.isLocal,
   });
 
   Product.fromJson(Map<String, dynamic> json) {
@@ -50,18 +52,20 @@ class Product {
     categoryName = json['categoryName'];
     companyID = json['companyID'];
     companyName = json['companyName'];
+    isLocal = json['isLocal'];
   }
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "productName": productName,
         "photoPath": photoPath,
+        "isLocal": isLocal ?? 0,
         // "brandID": brandID,
-       // "brandName": brandName,
+        // "brandName": brandName,
         // "sku": sku,
         //"languageName": languageName,
-       // "categoryID": categoryID,
-       // "categoryName": categoryName,
+        // "categoryID": categoryID,
+        // "categoryName": categoryName,
         //"companyID": companyID,
         //"companyName": companyName,
       };

@@ -6,8 +6,8 @@ import '../../shared/index_shared.dart';
 import '../controller/categories/categories_state.dart';
 
 class CategoriesComponents extends StatefulWidget {
-  CategoriesComponents({Key? key,this.selectCategoryId}) : super(key: key);
-  String? selectCategoryId;
+  CategoriesComponents({Key? key,required this.onChanged}) : super(key: key);
+  final ValueChanged<String?>? onChanged;
 
   @override
   State<CategoriesComponents> createState() => _CategoriesComponentsState();
@@ -33,9 +33,7 @@ class _CategoriesComponentsState extends State<CategoriesComponents> {
                       BorderSide(color: AppColors.grey.withOpacity(0.8)),
                 ),
                 isDense: true,
-                label: widget.selectCategoryId != null
-                    ? null
-                    : const Text(AppText.categories),
+                label:  const Text(AppText.categories),
                 contentPadding: EdgeInsets.symmetric(horizontal: 10.w),
               ),
               isExpanded: true,
@@ -53,7 +51,7 @@ class _CategoriesComponentsState extends State<CategoriesComponents> {
                   .map((item) => DropdownMenuItem<String>(
                         onTap: () {
                          setState(() {
-                           widget.selectCategoryId = item.id.toString();
+                           widget.onChanged!(item.id.toString());
                          });
                         },
                         value: item.id.toString(),
@@ -65,11 +63,11 @@ class _CategoriesComponentsState extends State<CategoriesComponents> {
                         ),
                       ))
                   .toList(),
-              onChanged: (value) {
-                widget.selectCategoryId = value.toString();
+              onChanged: (item) {
+                widget.onChanged!(item.toString());
               },
-              onSaved: (value) {
-                widget.selectCategoryId = value.toString();
+              onSaved: (item) {
+                widget.onChanged!(item.toString());
               },
             );
           } else {

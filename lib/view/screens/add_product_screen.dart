@@ -12,8 +12,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final TextEditingController productNameController = TextEditingController();
 
   final TextEditingController skuController = TextEditingController();
-  String brandId = BrandsComponents().selectBrandId ?? '0';
-  String categoryId = CategoriesComponents().selectCategoryId ?? '0';
+  String? brandId;
+
+  String? categoryId;
   XFile? image;
 
   final ImagePicker picker = ImagePicker();
@@ -82,9 +83,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('brand and category');
-    print(brandId);
-    print(categoryId);
     return BlocProvider(
       create: (context) => AddProductCubit(),
       child: BlocConsumer<AddProductCubit, AddProductStates>(
@@ -121,11 +119,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     SizedBox(
                       height: 20.h,
                     ),
-                    CategoriesComponents(),
+                    CategoriesComponents(onChanged: (v) {
+                      categoryId = v;
+                    }),
                     SizedBox(
                       height: 15.h,
                     ),
-                    BrandsComponents(),
+                    BrandsComponents(onChanged: (v) {
+                      brandId = v;
+                    }),
                     SizedBox(
                       height: 40.h,
                     ),
@@ -174,15 +176,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             btnColor: AppColors.teal,
                             text: AppText.addProduct,
                             onPressed: () {
+
                               AddProductCubit.get(context).addProduct(
-                                  brandID: brandId,
-                                  categoryID: categoryId,
+                                  brandID: brandId!,
+                                  categoryID: categoryId!,
                                   productName: productNameController.text,
                                   sukName: skuController.text,
                                   context: context,
                                   file: image!,
                                   productId: 7765.toString());
-                              //AddProductCubit.get(context).uploadImage(image, productId);
+
                             });
                       },
                       condition: state is! AddProductLoadingState,

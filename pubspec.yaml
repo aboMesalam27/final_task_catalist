@@ -38,7 +38,6 @@ dependencies:
   cupertino_icons:
   flutter_bloc:
   dio:
-  equatable :
   shared_preferences:
   connectivity_plus:
   flutter_screenutil:
@@ -49,9 +48,6 @@ dependencies:
   shimmer:
   dropdown_button2:
   sqflite:
-  hive:
-  path_provider:
-  path:
 
 dev_dependencies:
   flutter_test:

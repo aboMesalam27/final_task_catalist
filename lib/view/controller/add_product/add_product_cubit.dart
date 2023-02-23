@@ -5,7 +5,6 @@ import 'index_add_product.dart';
 class AddProductCubit extends Cubit<AddProductStates> {
   AddProductCubit() : super(AddProductInitialState());
   static AddProductCubit get(context) => BlocProvider.of(context);
-  // AddProductModel? addProductModel;
 
   List<Product>? productList = [];
   bool withInternet = false;
@@ -25,7 +24,7 @@ class AddProductCubit extends Cubit<AddProductStates> {
       if (kDebugMode) {}
       emit(AddProductLoadingState());
       String photoPath = await uploadImage(file, productId);
-      DioHelper.postData(
+      message = await DioHelper.postData(
         url: EndPoints.ADD_PRODUCT,
         data: {
           "productName": productName,
@@ -36,9 +35,8 @@ class AddProductCubit extends Cubit<AddProductStates> {
         },
         token: CacheHelper.getData(key: 'token'),
       ).then((value) {
-        message = value.data['message'];
-        //addProductModel = AddProductModel.fromJson(value.data);
         emit(AddProductSuccessState());
+        return value.data['message'];
       }).catchError((error) {});
     } else {
       if (kDebugMode) {
@@ -49,6 +47,7 @@ class AddProductCubit extends Cubit<AddProductStates> {
         brandID: brandID,
         productName: productName,
         sku: 'procare',
+        isLocal: 1,
       );
       DBProvider.createProducts(product);
       emit(AddProductSuccessState());
@@ -63,18 +62,14 @@ class AddProductCubit extends Cubit<AddProductStates> {
       "photoPath": await MultipartFile.fromFile(file.path, filename: fileName),
     });
 
-    emit(UploadPhotoLoadingState());
-
-    DioHelper.postData(
+    return DioHelper.postData(
       url: EndPoints.uploadPhoto(productId),
       data: formData,
       token: CacheHelper.getData(key: 'token'),
     ).then((value) {
-      //print('value: $value');
       photoPath = value.data['response']['fullPath'];
-      // print('photoPath: $photoPath');
-      emit(UploadPhotoSuccessState(photoPath: photoPath!));
+
+      return photoPath!;
     });
-    return photoPath!;
   }
 }
